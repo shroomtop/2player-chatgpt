@@ -1,0 +1,126 @@
+<!--LEGAL-DNA:{"jurisdiction":"US/MN/Baxter","export_tag":"EAR99","spdx":"MIT","artifact_time":1750713891514,"def_pub":"OIN","consent_req":true,"city":"Baxter"}-->
+<!--
+  SHROOMTOP420™ DUAL-PROMPT MERGER TOOL
+  LICENSE.txt, README.txt, VERSION.txt, manifest.json, promptmeta.json embedded inline
+  Offline, zero-setup, CSP/meta-hardened, fully mobile, PWA-ready
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Dual-Prompt Merger Tool for ChatGPT — by Shroomtop420™">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net">
+  <title>Dual-Prompt Merger | Shroomtop420™</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    html { background: #181825; color-scheme: dark; }
+    .fade-in { animation: fadeIn 1s; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    textarea { resize:vertical; min-height: 96px; font-family:monospace; }
+    .copy-btn { cursor:pointer; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 bg-gradient-to-br from-zinc-900 via-indigo-950 to-zinc-900">
+  <!-- HEADER -->
+  <div class="w-full max-w-2xl mb-4 text-center">
+    <h1 class="text-2xl font-bold text-violet-300 tracking-tight">Ξ-SHROOMTOP420™ Dual-Prompt Merger</h1>
+    <p class="text-base text-zinc-300 mt-1">Paste two people’s prompts, customize, and generate a ChatGPT meta-prompt for clear multi-user interactions.</p>
+  </div>
+  <!-- FORM -->
+  <form id="mergeForm" class="w-full max-w-2xl bg-zinc-800 rounded-2xl shadow-xl p-4 space-y-4 fade-in" autocomplete="off" onsubmit="return false;">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-violet-200">Person A Name</label>
+        <input id="nameA" class="w-full px-2 py-1 rounded bg-zinc-900 text-violet-200" value="Alex" required>
+        <label class="block text-xs mt-2 text-zinc-400">Prompt A</label>
+        <textarea id="promptA" class="w-full px-2 py-1 rounded bg-zinc-900 text-zinc-100" placeholder="Paste Person A's ChatGPT prompt here" required></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-sky-200">Person B Name</label>
+        <input id="nameB" class="w-full px-2 py-1 rounded bg-zinc-900 text-sky-200" value="Jamie" required>
+        <label class="block text-xs mt-2 text-zinc-400">Prompt B</label>
+        <textarea id="promptB" class="w-full px-2 py-1 rounded bg-zinc-900 text-zinc-100" placeholder="Paste Person B's ChatGPT prompt here" required></textarea>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs text-zinc-400">Shared Scenario/Context (optional)</label>
+        <input id="scenario" class="w-full px-2 py-1 rounded bg-zinc-900 text-zinc-100" placeholder="E.g. AI Debate, Story, Interview">
+      </div>
+      <div class="flex gap-4 flex-wrap">
+        <label class="flex items-center text-xs text-zinc-400">
+          <input type="checkbox" id="addNotes" class="mr-1"> Add moderator/system note
+        </label>
+        <label class="flex items-center text-xs text-zinc-400">
+          <input type="checkbox" id="swapOrder" class="mr-1"> Swap order (B before A)
+        </label>
+        <label class="flex items-center text-xs text-zinc-400">
+          <input type="checkbox" id="extraRules" class="mr-1"> Add rules for responses
+        </label>
+      </div>
+    </div>
+    <button id="generateBtn" type="button" class="w-full py-2 mt-2 rounded-xl font-bold bg-gradient-to-r from-violet-600 via-pink-600 to-indigo-700 text-white shadow-lg hover:scale-105 transition-all">Generate Meta-Prompt</button>
+  </form>
+  <!-- OUTPUT -->
+  <div id="outputBlock" class="w-full max-w-2xl mt-6 hidden">
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-lg font-bold text-violet-300">🧬 Generated Meta-Prompt</span>
+      <button id="copyBtn" class="copy-btn text-sm text-zinc-400 hover:text-violet-400 px-2 py-1 rounded border border-zinc-700 bg-zinc-900">Copy</button>
+    </div>
+    <textarea id="output" class="w-full p-2 bg-zinc-900 rounded text-zinc-100 text-sm" rows="12" readonly spellcheck="false"></textarea>
+    <div class="text-xs mt-2 text-zinc-500">
+      Paste this into ChatGPT to clearly simulate a conversation between two distinct users.<br>
+      <span class="italic">All logic, docs, and manifest embedded. Ξ Shroomtop420™</span>
+    </div>
+  </div>
+  <!-- INLINE META FILES + VERSION -->
+  <template id="meta-files">
+    <!--
+      LICENSE.txt: MIT License
+      README.txt: Dual-Prompt Merger Tool for generating ChatGPT meta-prompts with two personas.
+      VERSION.txt: v1.0.0 (2025-06-23)
+      manifest.json: { "name": "DualPromptMerger", "version": "1.0.0", "offline": true, "author": "Shroomtop420™" }
+      promptmeta.json: { "tool": "DualPromptMerger", "purpose": "Merge two distinct user prompts for ChatGPT", "owner": "Shroomtop420™" }
+    -->
+  </template>
+  <!-- JS LOGIC -->
+  <script>
+    const genBtn = document.getElementById('generateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const output = document.getElementById('output');
+    const outputBlock = document.getElementById('outputBlock');
+    function esc(s){return (s||'').replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+    genBtn.onclick = function() {
+      // Get values
+      let a = document.getElementById('nameA').value.trim()||'Person A';
+      let b = document.getElementById('nameB').value.trim()||'Person B';
+      let pa = document.getElementById('promptA').value.trim();
+      let pb = document.getElementById('promptB').value.trim();
+      let scenario = document.getElementById('scenario').value.trim();
+      let addNotes = document.getElementById('addNotes').checked;
+      let swap = document.getElementById('swapOrder').checked;
+      let extra = document.getElementById('extraRules').checked;
+      // Meta-prompt generation
+      let sys = `You are to simulate a conversation or comparison between two distinct people, clearly separating their roles and responses.`;
+      if (scenario) sys += `\nContext/Scenario: ${scenario}`;
+      if (addNotes) sys += `\nNote: You must keep ${a} and ${b} fully separate.`;
+      let rules = extra ?
+        `\nRules:\n- Repeat neither user's input verbatim.\n- Distinguish their tone, vocabulary, and logic.\n- Do not merge or dilute responses.\n- If summarizing, indicate the source for every idea.` : "";
+      let partA = `Person: ${swap?b:a}\nPrompt:\n${esc(swap?pb:pa)}\n`;
+      let partB = `Person: ${swap?a:b}\nPrompt:\n${esc(swap?pa:pb)}\n`;
+      let divider = '\n---\n';
+      let meta = `${sys}${rules}\n${divider}${partA}${divider}${partB}\n${divider}When responding, reply as both ${a} and ${b}, keeping all responses totally distinct and clearly attributed.`;
+      output.value = meta.trim();
+      outputBlock.classList.remove('hidden');
+      output.focus();
+      output.select();
+    };
+    copyBtn.onclick = function() {
+      output.select(); document.execCommand('copy');
+      copyBtn.textContent = "Copied!";
+      setTimeout(()=>{copyBtn.textContent="Copy";},1200);
+    };
+  </script>
+</body>
+</html>
