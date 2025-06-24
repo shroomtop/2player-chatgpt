@@ -1,0 +1,13 @@
+{
+  "created_by": "Alex Moberg",
+  "created_on": "2025-06-24T15:00:00Z",
+  "legal_dna": {
+    "jurisdiction": "US/MN/Baxter",
+    "export_tag": "EAR99",
+    "spdx": "MIT",
+    "artifact_time": 1750780126908,
+    "def_pub": "OIN",
+    "consent_req": true,
+    "city": "Baxter"
+  }
+}

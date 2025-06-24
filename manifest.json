@@ -1,0 +1,11 @@
+{
+  "name": "2player-chatgpt",
+  "version": "0.1.0",
+  "description": "Two-player real-time ChatGPT web client with local sync.",
+  "license": "MIT",
+  "homepage": "https://shroomtop.github.io/2player-chatgpt",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shroomtop/2player-chatgpt.git"
+  }
+}
